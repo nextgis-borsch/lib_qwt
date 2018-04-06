@@ -278,6 +278,10 @@ target_include_directories(${LIB_NAME} INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
 )
 
+if(WIN32)
+    target_compile_definitions(${LIB_NAME} INTERFACE QWT_DLL)
+endif()
+
 # Add all targets to the build-tree export set
 export(TARGETS ${LIB_NAME}
     FILE ${PROJECT_BINARY_DIR}/${PACKAGE_UPPER_NAME}Targets.cmake)
