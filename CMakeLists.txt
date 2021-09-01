@@ -124,6 +124,7 @@ option(WITH_QWTMATHML "You can use the MathML renderer of the Qt solutions packa
 option(WITH_QWTDESIGNER "If you want to build the Qwt designer plugin" OFF)
 option(WITH_QWTPLAYGROUND "The playground is primarily intended for the Qwt development to explore and test new features" OFF)
 option(WITH_QWTEXAMPLES "If you want to auto build the examples" OFF)
+option(WITH_QWTPOLAR "Widget for plotting two-dimensional graphs" ON)
 
 # TODO: remove implemented features from if
 if(WITH_QWTPLAYGROUND OR WITH_QWTEXAMPLES OR WITH_QWTDESIGNER)

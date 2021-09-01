@@ -1,0 +1,25 @@
+diff --git a/src/qwt_picker.h b/src/qwt_picker.h
+index 3a13402..22f835a 100644
+--- a/src/qwt_picker.h
++++ b/src/qwt_picker.h
+@@ -14,6 +14,8 @@
+ #include "qwt_event_pattern.h"
+ 
+ #include <qobject.h>
++#include <qpen.h>
++#include <qfont.h>
+ 
+ class QwtPickerMachine;
+ class QwtWidgetOverlay;
+diff --git a/src/qwt_widget_overlay.h b/src/qwt_widget_overlay.h
+index 3e45fc1..7ccbe9a 100644
+--- a/src/qwt_widget_overlay.h
++++ b/src/qwt_widget_overlay.h
+@@ -39,6 +39,7 @@ class QRegion;
+  */
+ class QWT_EXPORT QwtWidgetOverlay : public QWidget
+ {
++  Q_OBJECT
+   public:
+     /*!
+        \brief Mask mode

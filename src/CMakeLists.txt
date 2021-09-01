@@ -27,9 +27,9 @@
 set(HHEADERS
     qwt.h
     qwt_abstract_scale_draw.h
+    qwt_bezier.h
     qwt_clipper.h
     qwt_color_map.h
-    qwt_compat.h
     qwt_column_symbol.h
     qwt_date.h
     qwt_date_scale_draw.h
@@ -56,6 +56,12 @@ set(HHEADERS
     qwt_scale_engine.h
     qwt_scale_map.h
     qwt_spline.h
+    qwt_spline_basis.h
+    qwt_spline_parametrization.h
+    qwt_spline_local.h
+    qwt_spline_cubic.h
+    qwt_spline_pleasing.h
+    qwt_spline_polynomial.h
     qwt_symbol.h
     qwt_system_clock.h
     qwt_text_engine.h
@@ -66,7 +72,9 @@ set(HHEADERS
 )
 
 set(CSOURCES
+    qwt.cpp
     qwt_abstract_scale_draw.cpp
+    qwt_bezier.cpp
     qwt_clipper.cpp
     qwt_color_map.cpp
     qwt_column_symbol.cpp
@@ -93,8 +101,14 @@ set(CSOURCES
     qwt_scale_div.cpp
     qwt_scale_draw.cpp
     qwt_scale_map.cpp
-    qwt_spline.cpp
     qwt_scale_engine.cpp
+    qwt_spline.cpp
+    qwt_spline_basis.cpp
+    qwt_spline_parametrization.cpp
+    qwt_spline_local.cpp
+    qwt_spline_cubic.cpp
+    qwt_spline_pleasing.cpp
+    qwt_spline_polynomial.cpp
     qwt_symbol.cpp
     qwt_system_clock.cpp
     qwt_text_engine.cpp
@@ -106,7 +120,11 @@ set(CSOURCES
 
 if(WITH_QWTPLOT)
     set(HHEADERS ${HHEADERS}
+        qwt_axis.h
+        qwt_axis_id.h
         qwt_curve_fitter.h
+        qwt_spline_curve_fitter.h
+        qwt_weeding_curve_fitter.h
         qwt_event_pattern.h
         qwt_abstract_legend.h
         qwt_legend.h
@@ -117,6 +135,7 @@ if(WITH_QWTPLOT)
         qwt_plot_curve.h
         qwt_plot_dict.h
         qwt_plot_directpainter.h
+        qwt_plot_graphicitem.h
         qwt_plot_grid.h
         qwt_plot_histogram.h
         qwt_plot_item.h
@@ -136,6 +155,8 @@ if(WITH_QWTPLOT)
         qwt_plot_legenditem.h
         qwt_plot_seriesitem.h
         qwt_plot_shapeitem.h
+        qwt_plot_vectorfield.h
+        qwt_plot_abstract_canvas.h
         qwt_plot_canvas.h
         qwt_plot_panner.h
         qwt_plot_picker.h
@@ -145,6 +166,7 @@ if(WITH_QWTPLOT)
         qwt_point_mapper.h
         qwt_raster_data.h
         qwt_matrix_raster_data.h
+        qwt_vectorfield_symbol.h
         qwt_sampling_thread.h
         qwt_samples.h
         qwt_series_data.h
@@ -155,17 +177,19 @@ if(WITH_QWTPLOT)
 
     set(CSOURCES ${CSOURCES}
         qwt_curve_fitter.cpp
+        qwt_spline_curve_fitter.cpp
+        qwt_weeding_curve_fitter.cpp
         qwt_abstract_legend.cpp
         qwt_legend.cpp
         qwt_legend_data.cpp
         qwt_legend_label.cpp
         qwt_plot.cpp
         qwt_plot_renderer.cpp
-        qwt_plot_xml.cpp
         qwt_plot_axis.cpp
         qwt_plot_curve.cpp
         qwt_plot_dict.cpp
         qwt_plot_directpainter.cpp
+        qwt_plot_graphicitem.cpp
         qwt_plot_grid.cpp
         qwt_plot_histogram.cpp
         qwt_plot_item.cpp
@@ -181,9 +205,11 @@ if(WITH_QWTPLOT)
         qwt_plot_legenditem.cpp
         qwt_plot_seriesitem.cpp
         qwt_plot_shapeitem.cpp
+        qwt_plot_vectorfield.cpp
         qwt_plot_marker.cpp
         qwt_plot_textlabel.cpp
         qwt_plot_layout.cpp
+        qwt_plot_abstract_canvas.cpp
         qwt_plot_canvas.cpp
         qwt_plot_panner.cpp
         qwt_plot_rasteritem.cpp
@@ -194,21 +220,64 @@ if(WITH_QWTPLOT)
         qwt_point_mapper.cpp
         qwt_raster_data.cpp
         qwt_matrix_raster_data.cpp
+        qwt_vectorfield_symbol.cpp
         qwt_sampling_thread.cpp
         qwt_series_data.cpp
         qwt_point_data.cpp
         qwt_scale_widget.cpp
     )
-endif()
 
-if(WITH_SVG)
-    set(HHEADERS ${HHEADERS} qwt_plot_svgitem.h)
-    set(CSOURCES ${CSOURCES} qwt_plot_svgitem.cpp)
-endif()
+    if(WITH_SVG)
+        set(HHEADERS ${HHEADERS} qwt_plot_svgitem.h)
+        set(CSOURCES ${CSOURCES} qwt_plot_svgitem.cpp)
+    endif()
 
-if(WITH_QWTOPENGL)
-    set(HHEADERS ${HHEADERS} qwt_plot_glcanvas.h)
-    set(CSOURCES ${CSOURCES} qwt_plot_glcanvas.cpp)
+    if(WITH_QWTOPENGL)
+        set(HHEADERS ${HHEADERS} qwt_plot_glcanvas.h)
+        set(CSOURCES ${CSOURCES} qwt_plot_glcanvas.cpp)
+
+        if(NOT QT4_BUILD)
+            set(HHEADERS ${HHEADERS} qwt_plot_opengl_canvas.h)
+            set(CSOURCES ${CSOURCES} qwt_plot_opengl_canvas.cpp)
+        endif()
+    endif()
+
+    if(WITH_QWTPOLAR)
+        set(HHEADERS ${HHEADERS}
+            qwt_polar.h
+            qwt_polar_canvas.h
+            qwt_polar_curve.h
+            qwt_polar_fitter.h
+            qwt_polar_grid.h
+            qwt_polar_itemdict.h
+            qwt_polar_item.h
+            qwt_polar_layout.h
+            qwt_polar_magnifier.h
+            qwt_polar_marker.h
+            qwt_polar_panner.h
+            qwt_polar_picker.h
+            qwt_polar_plot.h
+            qwt_polar_renderer.h
+            qwt_polar_spectrogram.h
+        )
+
+        set(CSOURCES ${CSOURCES}
+            qwt_polar_canvas.cpp
+            qwt_polar_curve.cpp
+            qwt_polar_fitter.cpp
+            qwt_polar_grid.cpp
+            qwt_polar_item.cpp
+            qwt_polar_itemdict.cpp
+            qwt_polar_layout.cpp
+            qwt_polar_magnifier.cpp
+            qwt_polar_marker.cpp
+            qwt_polar_panner.cpp
+            qwt_polar_picker.cpp
+            qwt_polar_plot.cpp
+            qwt_polar_renderer.cpp
+            qwt_polar_spectrogram.cpp
+        )
+    endif()
 endif()
 
 if(WITH_QWTWIDGETS)
