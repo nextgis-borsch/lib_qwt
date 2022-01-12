@@ -314,8 +314,6 @@ if(WITH_QWTWIDGETS)
     )
 endif()
 
-QT4_WRAP_CPP(QWT_MOC_SOURCES ${HHEADERS})
-
 if(BUILD_SHARED_LIBS)
     add_library(${LIB_NAME} SHARED ${CSOURCES} ${QWT_MOC_SOURCES} ${HHEADERS})
     set_target_properties (${LIB_NAME} PROPERTIES
