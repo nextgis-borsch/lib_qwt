@@ -3,7 +3,7 @@
 # Purpose:  CMake build scripts
 # Author:   Dmitry Baryshnikov, dmitry.baryshnikov@nexgis.com
 ################################################################################
-# Copyright (C) 2017, NextGIS <info@nextgis.com>
+# Copyright (C) 2017-2022, NextGIS <info@nextgis.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -67,8 +67,6 @@ if(OSX_FRAMEWORK)
 endif()
 report_version(${PROJECT_NAME} ${VERSION})
 
-configure_file(${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
-
 if(OSX_FRAMEWORK OR BUILD_SHARED_LIBS)
     add_definitions(-DQWT_DLL)
 endif()
@@ -77,8 +75,6 @@ option(QT4_BUILD "Build with qt4" OFF)
 
 include(FindAnyProject)
 
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(QT_REQUIRED_COMPONENTS)
 if(QT4_BUILD)
     set(QT_REQUIRED_COMPONENTS ${QT_REQUIRED_COMPONENTS} QtCore QtGui)
@@ -121,34 +117,41 @@ else()
 endif()
 
 option(WITH_QWTMATHML "You can use the MathML renderer of the Qt solutions package to enable MathML support in Qwt" OFF)
-option(WITH_QWTDESIGNER "If you want to build the Qwt designer plugin" OFF)
-option(WITH_QWTPLAYGROUND "The playground is primarily intended for the Qwt development to explore and test new features" OFF)
-option(WITH_QWTEXAMPLES "If you want to auto build the examples" OFF)
+# option(WITH_QWTDESIGNER "If you want to build the Qwt designer plugin" OFF)
+# option(WITH_QWTPLAYGROUND "The playground is primarily intended for the Qwt development to explore and test new features" OFF)
+# option(WITH_QWTEXAMPLES "If you want to auto build the examples" OFF)
 option(WITH_QWTPOLAR "Widget for plotting two-dimensional graphs" ON)
 
 # TODO: remove implemented features from if
-if(WITH_QWTPLAYGROUND OR WITH_QWTEXAMPLES OR WITH_QWTDESIGNER)
-    message(FATAL_ERROR "Not cmaked yet!")
-endif()
+# if(WITH_QWTPLAYGROUND OR WITH_QWTEXAMPLES OR WITH_QWTDESIGNER)
+#     message(FATAL_ERROR "Not cmaked yet!")
+# endif()
 
 set(LIB_NAME ${PROJECT_NAME})
 set(PACKAGE_NAME ${PROJECT_NAME})
 string(TOUPPER ${PACKAGE_NAME} PACKAGE_UPPER_NAME)
 
+# set(CMAKE_VERBOSE_MAKEFILE ON)
+# set(CMAKE_AUTOMOC ON)
+# if(CMAKE_VERSION VERSION_LESS "3.7.0")
+#     set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# endif()
+
 add_subdirectory(src)
 
-if(WITH_QWTDESIGNER)
-    add_subdirectory(designer)
-endif()
-if(WITH_QWTPLAYGROUND)
-    add_subdirectory(playground)
-endif()
-if(WITH_QWTEXAMPLES)
-    add_subdirectory(examples)
-endif()
+# if(WITH_QWTDESIGNER)
+#     add_subdirectory(designer)
+# endif()
+# if(WITH_QWTPLAYGROUND)
+#     add_subdirectory(playground)
+# endif()
+# if(WITH_QWTEXAMPLES)
+#     add_subdirectory(examples)
+# endif()
 
 
 # uninstall
+configure_file(${CMAKE_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake IMMEDIATE @ONLY)
 add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 # Export package ===============================================================

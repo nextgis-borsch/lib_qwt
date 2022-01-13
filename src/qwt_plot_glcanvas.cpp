@@ -13,7 +13,7 @@
 
 #include <qcoreevent.h>
 #include <qpainter.h>
-#include <qpainterpath.h>
+// #include <qpainterpath.h>
 #include <qglframebufferobject.h>
 
 namespace

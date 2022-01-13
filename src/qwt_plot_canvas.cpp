@@ -12,7 +12,7 @@
 #include "qwt_plot.h"
 
 #include <qpainter.h>
-#include <qpainterpath.h>
+// #include <qpainterpath.h>
 #include <qevent.h>
 
 class QwtPlotCanvas::PrivateData

@@ -17,7 +17,8 @@
 
 class QwtPlot;
 class QPixmap;
-class QPainterPath;
+// class QPainterPath;
+#include <qpainterpath.h>
 
 /*!
    \brief Canvas of a QwtPlot.

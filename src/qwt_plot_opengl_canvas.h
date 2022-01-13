@@ -14,6 +14,7 @@
 #include "qwt_plot_abstract_canvas.h"
 
 #include <qopenglwidget.h>
+#include <qpainterpath.h>
 
 class QwtPlot;
 

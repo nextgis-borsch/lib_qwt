@@ -3,7 +3,7 @@
 # Purpose:  CMake build scripts
 # Author:   Dmitry Baryshnikov, dmitry.baryshnikov@nexgis.com
 ################################################################################
-# Copyright (C) 2017, NextGIS <info@nextgis.com>
+# Copyright (C) 2017-2022, NextGIS <info@nextgis.com>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a
 # copy of this software and associated documentation files (the "Software"),
@@ -23,6 +23,7 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 # DEALINGS IN THE SOFTWARE.
 ################################################################################
+# set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 set(HHEADERS
     qwt.h
@@ -314,14 +315,16 @@ if(WITH_QWTWIDGETS)
     )
 endif()
 
+qt5_wrap_cpp(PROCESSED_MOCS ${HHEADERS})
+
 if(BUILD_SHARED_LIBS)
-    add_library(${LIB_NAME} SHARED ${CSOURCES} ${QWT_MOC_SOURCES} ${HHEADERS})
+    add_library(${LIB_NAME} SHARED ${CSOURCES} ${HHEADERS} ${PROCESSED_MOCS})
     set_target_properties (${LIB_NAME} PROPERTIES
         VERSION ${VERSION}
         SOVERSION ${QWT_MAJOR_VERSION}
         DEFINE_SYMBOL QWT_MAKEDLL)
 elseif(OSX_FRAMEWORK)
-    add_library(${LIB_NAME} SHARED ${CSOURCES} ${QWT_MOC_SOURCES} ${HHEADERS})
+    add_library(${LIB_NAME} SHARED ${CSOURCES} ${HHEADERS} ${PROCESSED_MOCS})
     set_target_properties(${LIB_NAME} PROPERTIES
       FRAMEWORK TRUE
       FRAMEWORK_VERSION ${FRAMEWORK_VERSION}
@@ -334,7 +337,7 @@ elseif(OSX_FRAMEWORK)
       SOVERSION ${QWT_MAJOR_VERSION}
       )
 else()
-    add_library(${LIB_NAME} STATIC ${CSOURCES} ${QWT_MOC_SOURCES} ${HHEADERS})
+    add_library(${LIB_NAME} STATIC ${CSOURCES} ${HHEADERS} ${PROCESSED_MOCS})
 endif()
 
 target_link_extlibraries(${LIB_NAME})
